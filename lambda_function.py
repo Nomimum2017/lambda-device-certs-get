@@ -2,7 +2,6 @@
 from __future__ import (absolute_import, division, print_function, unicode_literals)
 
 import boto3
-import uuid
 
 def lambda_handler(event, context):
 
@@ -18,9 +17,9 @@ def lambda_handler(event, context):
     )
     print("getCerts output: ", getCerts['ResponseMetadata'])
 
-    return ("{ \"deviceCerts\": {" +
-        "\"deviceId\": " + getCerts['Item']['deviceId'] + "," +
-        "\"certificatePem\": " + getCerts['Item']['certificatePem'] + "," +
-        "\"publicKey\": " + getCerts['Item']['publicKey'] + "," +
-        "\"privateKey\": " + getCerts['Item']['privateKey'] +
-    "}}")
+    return {"deviceCredentials":
+        {"deviceId": getCerts['Item']['deviceId'],
+        "certificatePem": getCerts['Item']['certificatePem'],
+        "publicKey": getCerts['Item']['publicKey'],
+        "privateKey": getCerts['Item']['privateKey']
+    }}
