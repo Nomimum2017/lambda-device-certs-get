@@ -6,7 +6,7 @@ import uuid
 
 def lambda_handler(event, context):
 
-    deviceId = event['body']['deviceId']
+    deviceId = event['params']['deviceId']
 
     dynamodb = boto3.resource('dynamodb')
     certTable = dynamodb.Table('device-certs')
@@ -18,9 +18,9 @@ def lambda_handler(event, context):
     )
     print("getCerts output: ", getCerts['ResponseMetadata'])
 
-    return {"deviceCerts": {
-        "deviceId": getCerts['deviceId'],
-        "certificatePem": getCerts['deviceId'],
-        "PublicKey": getCerts['PublicKey'],
-        "PrivateKey": getCerts['PrivateKey']
-    }}
+    return ("{ \"deviceCerts\": {" +
+        "\"deviceId\": " + getCerts['Item']['deviceId'] + "," +
+        "\"certificatePem\": " + getCerts['Item']['certificatePem'] + "," +
+        "\"publicKey\": " + getCerts['Item']['publicKey'] + "," +
+        "\"privateKey\": " + getCerts['Item']['privateKey'] +
+    "}}")
